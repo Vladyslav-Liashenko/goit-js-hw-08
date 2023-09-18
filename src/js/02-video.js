@@ -1,3 +1,4 @@
+import  Vimeo  from '@vimeo/player';
 const iframe = document.querySelector('iframe');
 const player = new Vimeo.Player(iframe);
 
@@ -32,5 +33,3 @@ if (savedTime !== null && !isNaN(savedTime)) {
 
 // Тепер ви можете відтворити відео
 player.play();
-
-
