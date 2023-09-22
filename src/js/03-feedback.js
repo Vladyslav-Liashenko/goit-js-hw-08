@@ -11,7 +11,7 @@ const updateStorage = throttle(() => {
     email: emailInput.value,
     message: messageTextarea.value,
   };
-  localStorage.setItem(feedbackStorageKey, JSON.stringify(formState));
+    localStorage.setItem(feedbackStorageKey, JSON.stringify(formState));
 }, 500);
 
 
@@ -25,23 +25,24 @@ function fillFormFromStorage() {
 }
 fillFormFromStorage();
 
-feedbackForm.addEventListener('input', updateStorage);
+// feedbackForm.addEventListener('input', updateStorage);
 
 feedbackForm.addEventListener('submit', event => {
-  event.preventDefault();
+    event.preventDefault();
 
   const formState = {
     email: emailInput.value,
     message: messageTextarea.value,
   };
 
+  // Виводимо дані в консоль
+    console.log('Form submitted with data:', formState);
+    
   // Очищаємо сховище
   localStorage.removeItem(feedbackStorageKey);
-
-  // Виводимо дані в консоль
-  console.log('Form submitted with data:', formState);
 
   // Очищаємо поля форми
   emailInput.value = '';
   messageTextarea.value = '';
+  updateStorage();
 });
