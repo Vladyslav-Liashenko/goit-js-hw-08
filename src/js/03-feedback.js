@@ -4,23 +4,26 @@ const feedbackForm = document.querySelector('.feedback-form');
 const emailInput = feedbackForm.querySelector('input[name="email"]');
 const messageTextarea = feedbackForm.querySelector('textarea[name="message"]');
 const feedbackStorageKey = 'feedback-form-state';
+let formState = {};
 
+const updateStorage = throttle((event) => {
 
-const updateStorage = throttle(() => {
-  const formState = {
-    email: emailInput.value,
-    message: messageTextarea.value,
-  };
+  formState.email = emailInput.value.trim();
+  formState.message = messageTextarea.value.trim();
     localStorage.setItem(feedbackStorageKey, JSON.stringify(formState));
 }, 500);
 
 
 function fillFormFromStorage() {
-  const storedState = localStorage.getItem(feedbackStorageKey);
-  if (storedState) {
-    const formState = JSON.parse(storedState);
-    emailInput.value = formState.email || '';
-    messageTextarea.value = formState.message || '';
+  try {
+    const storedState = localStorage.getItem(feedbackStorageKey);
+    if (storedState) {
+      const formState = JSON.parse(storedState);
+      emailInput.value = formState.email || '';
+      messageTextarea.value = formState.message || '';
+    }
+  } catch (error) {
+    console.log(error.message);
   }
 }
 fillFormFromStorage();
@@ -30,10 +33,8 @@ fillFormFromStorage();
 feedbackForm.addEventListener('submit', event => {
     event.preventDefault();
 
-  const formState = {
-    email: emailInput.value,
-    message: messageTextarea.value,
-  };
+  formState.email = emailInput.value.trim();
+  formState.message = messageTextarea.value.trim();
 
   // Виводимо дані в консоль
     console.log('Form submitted with data:', formState);
@@ -42,7 +43,6 @@ feedbackForm.addEventListener('submit', event => {
   localStorage.removeItem(feedbackStorageKey);
 
   // Очищаємо поля форми
-  emailInput.value = '';
-  messageTextarea.value = '';
-  updateStorage();
+  formState = {};
+  event.target.reset();
 });
